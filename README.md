@@ -98,3 +98,126 @@ public class UDPClient {
 3. **Input a message when prompted and observe the output.**
 
 This code mimics the functionality of your C code for a UDP client, allowing you to send a message to a server and print the details of the transmission.
+
+
+
+
+
+
+
+
+Below is the Java code for a UDP server that performs similar functionality to the provided C code. The Java server will receive a message from a client, print the message, and send a response back to the client.
+
+```java
+import java.net.*;
+
+public class UDPServer {
+    public static void main(String[] args) {
+        DatagramSocket socket = null;
+        try {
+            socket = new DatagramSocket(8080);
+            byte[] buffer = new byte[1024];
+
+            System.out.println("Server listening on port 8080");
+
+            while (true) {
+                // Receive packet from client
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                socket.receive(packet);
+                String received = new String(packet.getData(), 0, packet.getLength());
+                System.out.println("Client: " + received);
+
+                // Get client address and port
+                InetAddress clientAddress = packet.getAddress();
+                int clientPort = packet.getPort();
+                System.out.println("The client port is " + clientPort);
+
+                // Send response to client
+                String response = "Hello from server";
+                byte[] responseBytes = response.getBytes();
+                DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, clientAddress, clientPort);
+                socket.send(responsePacket);
+
+                System.out.println("Message sent to client.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+        }
+    }
+}
+```
+
+### Explanation:
+
+1. **Import Statements:**
+   ```java
+   import java.net.*;
+   ```
+
+2. **Socket Initialization:**
+   ```java
+   DatagramSocket socket = null;
+   try {
+       socket = new DatagramSocket(8080);
+       byte[] buffer = new byte[1024];
+
+       System.out.println("Server listening on port 8080");
+   ```
+
+3. **Receiving Data from Client:**
+   ```java
+   while (true) {
+       DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+       socket.receive(packet);
+       String received = new String(packet.getData(), 0, packet.getLength());
+       System.out.println("Client: " + received);
+   ```
+
+4. **Getting Client Address and Port:**
+   ```java
+   InetAddress clientAddress = packet.getAddress();
+   int clientPort = packet.getPort();
+   System.out.println("The client port is " + clientPort);
+   ```
+
+5. **Sending Response to Client:**
+   ```java
+   String response = "Hello from server";
+   byte[] responseBytes = response.getBytes();
+   DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, clientAddress, clientPort);
+   socket.send(responsePacket);
+
+   System.out.println("Message sent to client.");
+   ```
+
+6. **Exception Handling and Closing Socket:**
+   ```java
+   } catch (IOException e) {
+       e.printStackTrace();
+   } finally {
+       if (socket != null && !socket.isClosed()) {
+           socket.close();
+       }
+   }
+   ```
+
+### Running the Application:
+1. **Compile the Java code:**
+   ```sh
+   javac UDPServer.java
+   ```
+
+2. **Run the Java server:**
+   ```sh
+   java UDPServer
+   ```
+
+The server will listen for incoming UDP packets from clients, print the received message, and send a response back to the client. The server also prints the client's port number. The server runs indefinitely, handling multiple client requests in a loop.
+
+### Note:
+To test this server, you can use the UDP client code provided in a previous message, or any other UDP client that sends messages to the server on port 8080.
+
