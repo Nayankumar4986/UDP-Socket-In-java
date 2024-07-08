@@ -202,8 +202,52 @@ public class UDPServer {
     }
 }
 ```
+Below is the Java code for a UDP server that performs similar functionality to the provided C code. The Java server will receive a message from a client, print the message, and send a response back to the client.
 
-### Explanation OF CODE FROM SERVER SIDE:
+```java
+import java.net.*;
+
+public class UDPServer {
+    public static void main(String[] args) {
+        DatagramSocket socket = null;
+        try {
+            socket = new DatagramSocket(8080);
+            byte[] buffer = new byte[1024];
+
+            System.out.println("Server listening on port 8080");
+
+            while (true) {
+                // Receive packet from client
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                socket.receive(packet);
+                String received = new String(packet.getData(), 0, packet.getLength());
+                System.out.println("Client: " + received);
+
+                // Get client address and port
+                InetAddress clientAddress = packet.getAddress();
+                int clientPort = packet.getPort();
+                System.out.println("The client port is " + clientPort);
+
+                // Send response to client
+                String response = "Hello from server";
+                byte[] responseBytes = response.getBytes();
+                DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, clientAddress, clientPort);
+                socket.send(responsePacket);
+
+                System.out.println("Message sent to client.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+        }
+    }
+}
+```
+
+### Explanation Of Code:
 
 1. **Import Statements:**
    ```java
@@ -269,6 +313,10 @@ public class UDPServer {
    ```
 
 The server will listen for incoming UDP packets from clients, print the received message, and send a response back to the client. The server also prints the client's port number. The server runs indefinitely, handling multiple client requests in a loop.
+
+### Note:
+To test this server, you can use the UDP client code provided in a previous message, or any other UDP client that sends messages to the server on port 8080.
+
 
 ### Note:
 To test this server, you can use the UDP client code provided in a previous message, or any other UDP client that sends messages to the server on port 8080.
