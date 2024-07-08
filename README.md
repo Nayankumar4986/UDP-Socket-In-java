@@ -1,5 +1,5 @@
 Below is the Java code for a UDP client that performs similar functionality to the provided C code. The Java client will prompt the user for input, send it to a server using UDP, and print the number of bytes sent and the server's IP address.
-
+** CLIENT SIDE 
 ```java
 import java.net.*;
 import java.io.*;
@@ -106,8 +106,7 @@ This code mimics the functionality of your C code for a UDP client, allowing you
 
 
 
-Below is the Java code for a UDP server that performs similar functionality to the provided C code. The Java server will receive a message from a client, print the message, and send a response back to the client.
-
+** SERVER SIDE 
 ```java
 import java.net.*;
 
